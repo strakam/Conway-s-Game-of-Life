@@ -18,7 +18,8 @@ bg = (30, 30, 30)
 show_grid = True
 simulate = False
 
-cell_grid = [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
+def empty_grid():
+    return [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
 
 # function to generate evenly spaced lines forming a grid
 def generate_grid(spacing):
@@ -34,7 +35,6 @@ def draw_square(x, y, size):
 def get_pos():
     pos = pygame.mouse.get_pos()
     return pos[0] // square_size, pos[1] // square_size
-
 
 def get_neighbors_count(x, y):
     count = 0
@@ -59,6 +59,8 @@ def get_next_state(x,y):
             return 1
         return 0
 
+
+cell_grid = empty_grid()  # initialize grid
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -71,6 +73,8 @@ while running:
                 show_grid = not show_grid
             if event.key == pygame.K_s:
                 simulate = not simulate
+            if event.key == pygame.K_r and not simulate:
+                cell_grid = empty_grid()
         # check for click and get mouse position
         if event.type == pygame.MOUSEBUTTONDOWN and not simulate:
             pos = get_pos()
