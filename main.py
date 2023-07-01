@@ -11,6 +11,10 @@ screen = pygame.display.set_mode((window_size, window_size))
 clock = pygame.time.Clock()
 running = True
 
+fg = (150, 150, 150)
+fg_grid = (50, 50, 50)
+bg = (30, 30, 30)
+
 show_grid = True
 simulate = False
 
@@ -18,12 +22,12 @@ simulate = False
 def generate_grid(spacing):
     grid = []
     for i in range(0, window_size, spacing):
-        pygame.draw.line(screen, (255, 255, 255), (i, 0), (i, window_size))
-        pygame.draw.line(screen, (255, 255, 255), (0, i), (window_size, i))
+        pygame.draw.line(screen, fg_grid, (i, 0), (i, window_size))
+        pygame.draw.line(screen, fg_grid, (0, i), (window_size, i))
 
 def draw_square(x, y, size):
     r = pygame.Rect(x, y, size, size)
-    pygame.draw.rect(screen, (255, 255, 255), r)
+    pygame.draw.rect(screen, fg, r)
 
 def snap_to_grid(x, y, spacing):
     return (x // spacing) * spacing, (y // spacing) * spacing
@@ -72,7 +76,7 @@ while running:
             cell_grid[pos[0]//square_size][pos[1]//square_size] = 1
 
     # draw line
-    screen.fill((0, 0, 0))
+    screen.fill(bg)
     if show_grid:
         generate_grid(square_size)
 
