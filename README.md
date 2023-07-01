@@ -10,4 +10,6 @@ You can run it simply using `main.py` :video_game:
 - Press `g` to toggle grid visualisation
 - Press `r` to kill all cells (reset the configuration). Works only when the simulation is paused
 
+![Simple glider generator](sample_of_life.jpg)
+
 Go nuts :chestnut:
