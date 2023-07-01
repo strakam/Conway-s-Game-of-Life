@@ -18,6 +18,8 @@ bg = (30, 30, 30)
 show_grid = True
 simulate = False
 
+cell_grid = [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
+
 # function to generate evenly spaced lines forming a grid
 def generate_grid(spacing):
     grid = []
@@ -32,7 +34,6 @@ def draw_square(x, y, size):
 def snap_to_grid(x, y, spacing):
     return (x // spacing) * spacing, (y // spacing) * spacing
 
-cell_grid = [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
 
 def get_neighbors_count(x, y):
     count = 0
