@@ -27,7 +27,7 @@ simulate = False
 drag = False
 
 def empty_grid():
-    return [[DEAD for i in range(grid_size)] for j in range(grid_size)]
+    return [[DEAD]*grid_size for _ in range(grid_size)]
 
 # function to generate evenly spaced lines forming a grid
 def generate_grid(spacing):
