@@ -1,5 +1,5 @@
 ### Conway's game of life :heart_eyes:
-This is a simple implementation of `Convway's game of life`.
+This is a simple implementation of `Conway's game of life`.
 
 You can run it simply using `main.py`.
 > **The Game of Life**, also known simply as **Life**, is a cellular automaton devised by the British mathematician **John Horton Conway** in 1970. It is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves. It is Turing complete and can simulate a universal constructor or any other **Turing machine**.
@@ -10,7 +10,11 @@ You can run it simply using `main.py`.
 - Press `s` to toggle the simulation
 - Press `g` to toggle grid visualization
 - Press `r` to kill all cells (reset the configuration). Works only when the simulation is paused
-
-![Simple glider generator](sample_of_life.jpg){: width="400" height="300"}
+<div style="width: 60%; height: 60%">
+  
+![Simple glider generator](sample_of_life.jpg)
+  
+</div>
+![Simple glider generator](sample_of_life.jpg)
 
 Go nuts :chestnut:
