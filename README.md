@@ -10,11 +10,10 @@ You can run it simply using `main.py`.
 - Press `s` to toggle the simulation
 - Press `g` to toggle grid visualization
 - Press `r` to kill all cells (reset the configuration). Works only when the simulation is paused
-<div style="width: 60%; height: 60%">
+<div style="width: 60%; height: 60%justify-content: center; align-items: center;">
   
 ![Simple glider generator](sample_of_life.jpg)
   
 </div>
-![Simple glider generator](sample_of_life.jpg)
 
 Go nuts :chestnut:
