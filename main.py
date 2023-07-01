@@ -4,6 +4,9 @@ import pygame
 # pygame setup
 pygame.init()
 window_size = 1280
+square_size = 20
+fps = 60
+simulate_fps = 10
 screen = pygame.display.set_mode((window_size, window_size))
 clock = pygame.time.Clock()
 running = True
@@ -25,7 +28,7 @@ def draw_square(x, y, size):
 def snap_to_grid(x, y, spacing):
     return (x // spacing) * spacing, (y // spacing) * spacing
 
-cell_grid = [[0 for i in range(window_size//20)] for j in range(window_size//20)]
+cell_grid = [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
 
 def get_neighbors_count(x, y):
     count = 0
@@ -49,7 +52,7 @@ def get_next_state(x,y):
         if alive_neighbors == 3:
             return 1
         return 0
-    
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -65,16 +68,16 @@ while running:
         # check for click and get mouse position
         if event.type == pygame.MOUSEBUTTONDOWN and not simulate:
             pos = pygame.mouse.get_pos()
-            pos = snap_to_grid(pos[0], pos[1], 20)
-            cell_grid[pos[0]//20][pos[1]//20] = 1
+            pos = snap_to_grid(pos[0], pos[1], square_size)
+            cell_grid[pos[0]//square_size][pos[1]//square_size] = 1
 
     # draw line
     screen.fill((0, 0, 0))
     if show_grid:
-        generate_grid(20)
+        generate_grid(square_size)
 
     if simulate:
-        new_generation = [[0 for i in range(window_size//20)] for j in range(window_size//20)]
+        new_generation = [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
         for i in range(len(cell_grid)):
             for j in range(len(cell_grid)):
                 if simulate:
@@ -84,12 +87,12 @@ while running:
     for i in range(len(cell_grid)):
         for j in range(len(cell_grid)):
             if cell_grid[i][j] == 1:
-                draw_square(i*20, j*20, 20)
+                draw_square(i*square_size, j*square_size, square_size)
 
     pygame.display.flip()  # update the display
     if simulate:
-        clock.tick(10)  # limits FPS to 60
+        clock.tick(simulate_fps)  # limits FPS
     else:
-        clock.tick(60)
+        clock.tick(fps)
 
 pygame.quit()
