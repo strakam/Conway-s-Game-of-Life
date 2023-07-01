@@ -5,12 +5,19 @@ import pygame
 pygame.init()
 window_size = 1280
 square_size = 20
+grid_size = window_size // square_size
 fps = 60
 simulate_fps = 10
 screen = pygame.display.set_mode((window_size, window_size))
 clock = pygame.time.Clock()
 running = True
 
+# constants
+ALIVE = 1
+DEAD = 0
+LEFTMOUSEBUTTON = 1
+
+# colors
 fg = (150, 150, 150)
 fg_grid = (50, 50, 50)
 bg = (30, 30, 30)
@@ -20,44 +27,43 @@ simulate = False
 drag = False
 
 def empty_grid():
-    return [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
+    return [[DEAD for i in range(grid_size)] for j in range(grid_size)]
 
 # function to generate evenly spaced lines forming a grid
 def generate_grid(spacing):
-    grid = []
     for i in range(0, window_size, spacing):
         pygame.draw.line(screen, fg_grid, (i, 0), (i, window_size))
         pygame.draw.line(screen, fg_grid, (0, i), (window_size, i))
 
-def draw_square(x, y, size):
-    r = pygame.Rect(x, y, size, size)
+def draw_square(x, y):
+    r = pygame.Rect(x*square_size, y*square_size, square_size, square_size)
     pygame.draw.rect(screen, fg, r)
 
 def snap_to_grid(pos):
+    # max() and min() to prevent out of bounds
+    pos = (max(0, min(pos[0], window_size-1)), max(0, min(pos[1], window_size-1)))
     return pos[0] // square_size, pos[1] // square_size
 
 def get_neighbors_count(x, y):
     count = 0
     for i in range(-1, 2):
         for j in range(-1, 2):
-            if (x+i >= 0 and x+i < len(cell_grid) and y+j >= 0 and y+j < len(cell_grid)):
+            if (x+i >= 0 and x+i < grid_size and y+j >= 0 and y+j < grid_size):
                 if (i != 0 or j != 0):
-                    count += cell_grid[x+i][y+j]
+                    count += (cell_grid[x+i][y+j] == ALIVE)
     return count
 
 # Conway's Game of Life
-def get_next_state(x,y):
+def get_next_state(x, y):
     alive_neighbors = get_neighbors_count(x,y)
-    # if this cell is alive
-    if cell_grid[x][y] == 1:
+    if cell_grid[x][y] == ALIVE:
         if alive_neighbors < 2 or alive_neighbors > 3:
-            return 0
-        return 1
-    # if this cell is dead
+            return DEAD
+        return ALIVE
     else:
         if alive_neighbors == 3:
-            return 1
-        return 0
+            return ALIVE
+        return DEAD
 
 
 cell_grid = empty_grid()  # initialize grid
@@ -67,43 +73,43 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # check for keypress of 'g' to toggle grid
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_g:
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_g:                  # toggle grid
                 show_grid = not show_grid
-            if event.key == pygame.K_s:
+            if event.key == pygame.K_s:                  # toggle simulation
                 simulate = not simulate
-            if event.key == pygame.K_r and not simulate:
+            if event.key == pygame.K_r and not simulate: # reset grid
                 cell_grid = empty_grid()
-        # check for click and get mouse position
-        if event.type == pygame.MOUSEBUTTONDOWN and not simulate:
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and not simulate: # click to toggle cell state
             drag = True
-            pos = snap_to_grid(event.pos)
-            cell_grid[pos[0]][pos[1]] ^= 1
+            x, y = snap_to_grid(event.pos)
+            state = cell_grid[x][y]
+            cell_grid[x][y] = DEAD if (state == ALIVE) else ALIVE
         elif event.type == pygame.MOUSEBUTTONUP:
             drag = False
-        if event.type == pygame.MOUSEMOTION and not simulate: # drag to draw (button1 -> 1, otherwise -> 0)
+        elif event.type == pygame.MOUSEMOTION and not simulate: # drag to draw (button1 -> ALIVE, otherwise -> DEAD)
             if drag:
-                pos = snap_to_grid(event.pos)
-                cell_grid[pos[0]][pos[1]] = (event.buttons[0] == 1)
+                x, y = snap_to_grid(event.pos)
+                cell_grid[x][y] = ALIVE if (event.buttons[0] == LEFTMOUSEBUTTON) else DEAD
 
-    # draw line
+    # draw background and grid
     screen.fill(bg)
     if show_grid:
         generate_grid(square_size)
 
     if simulate:
-        new_generation = [[0 for i in range(window_size//square_size)] for j in range(window_size//square_size)]
-        for i in range(len(cell_grid)):
-            for j in range(len(cell_grid)):
-                if simulate:
-                    new_generation[i][j] = get_next_state(i,j)
+        new_generation = empty_grid()
+        for x in range(grid_size):
+            for y in range(grid_size):
+                new_generation[x][y] = get_next_state(x,y)
         cell_grid = new_generation
 
-    for i in range(len(cell_grid)):
-        for j in range(len(cell_grid)):
-            if cell_grid[i][j] == 1:
-                draw_square(i*square_size, j*square_size, square_size)
+    for x in range(grid_size):
+        for y in range(grid_size):
+            if cell_grid[x][y] == ALIVE:
+                draw_square(x,y)
 
     pygame.display.flip()  # update the display
     if simulate:
