@@ -63,7 +63,7 @@ while running:
             if event.key == pygame.K_s:
                 simulate = not simulate
         # check for click and get mouse position
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and not simulate:
             pos = pygame.mouse.get_pos()
             pos = snap_to_grid(pos[0], pos[1], 20)
             cell_grid[pos[0]//20][pos[1]//20] = 1
@@ -73,10 +73,16 @@ while running:
     if show_grid:
         generate_grid(20)
 
+    if simulate:
+        new_generation = [[0 for i in range(window_size//20)] for j in range(window_size//20)]
+        for i in range(len(cell_grid)):
+            for j in range(len(cell_grid)):
+                if simulate:
+                    new_generation[i][j] = get_next_state(i,j)
+        cell_grid = new_generation
+
     for i in range(len(cell_grid)):
-        for j in range(len(cell_grid[i])):
-            if simulate:
-                cell_grid[i][j] = get_next_state(i,j)
+        for j in range(len(cell_grid)):
             if cell_grid[i][j] == 1:
                 draw_square(i*20, j*20, 20)
 
