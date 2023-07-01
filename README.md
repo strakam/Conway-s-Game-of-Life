@@ -11,6 +11,6 @@ You can run it simply using `main.py`.
 - Press `g` to toggle grid visualization
 - Press `r` to kill all cells (reset the configuration). Works only when the simulation is paused
 
-![Simple glider generator](sample_of_life.jpg)
+![Simple glider generator](sample_of_life.jpg){: width="400" height="300"}
 
 Go nuts :chestnut:
