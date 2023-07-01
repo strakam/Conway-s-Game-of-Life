@@ -31,8 +31,9 @@ def draw_square(x, y, size):
     r = pygame.Rect(x, y, size, size)
     pygame.draw.rect(screen, fg, r)
 
-def snap_to_grid(x, y, spacing):
-    return (x // spacing) * spacing, (y // spacing) * spacing
+def get_pos():
+    pos = pygame.mouse.get_pos()
+    return pos[0] // square_size, pos[1] // square_size
 
 
 def get_neighbors_count(x, y):
@@ -72,9 +73,8 @@ while running:
                 simulate = not simulate
         # check for click and get mouse position
         if event.type == pygame.MOUSEBUTTONDOWN and not simulate:
-            pos = pygame.mouse.get_pos()
-            pos = snap_to_grid(pos[0], pos[1], square_size)
-            cell_grid[pos[0]//square_size][pos[1]//square_size] = 1
+            pos = get_pos()
+            cell_grid[pos[0]][pos[1]] ^= 1
 
     # draw line
     screen.fill(bg)
