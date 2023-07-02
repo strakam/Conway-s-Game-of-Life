@@ -7,7 +7,7 @@ You can run it simply using `python3 main.py`.
 #### **Controls :video_game: :**
 - Press `LeftMouseButton` on a square to toggle its state (`alive` <-> `dead`)
 - Drag the mouse to draw (`LeftMouseButton` -> `alive`, otherwise -> `dead`)
-- Press `{s,g}` to toggle the{simulation,grid visualization}
+- Press `{s,g}` to toggle the {simulation,grid visualization}
 - Press `r` to kill all cells (reset the configuration). Works only when the simulation is paused
 <div style="width: 60%; height: 60%; justify-content: center; align-items: center;">
   
