@@ -15,7 +15,7 @@ running = True
 # constants
 ALIVE = 1
 DEAD = 0
-LEFTMOUSEBUTTON = 1
+LEFTMOUSEBUTTON = 0
 
 # colors
 fg = (150, 150, 150)
@@ -24,7 +24,6 @@ bg = (30, 30, 30)
 
 show_grid = True
 simulate = False
-drag = False
 
 
 def empty_grid():
@@ -89,16 +88,12 @@ while running:
                 cell_grid = empty_grid()
 
         elif event.type == pygame.MOUSEBUTTONDOWN and not simulate:  # click to toggle cell state
-            drag = True
             x, y = snap_to_grid(event.pos)
-            state = cell_grid[x][y]
-            cell_grid[x][y] = DEAD if (state == ALIVE) else ALIVE
-        elif event.type == pygame.MOUSEBUTTONUP:
-            drag = False
-        elif event.type == pygame.MOUSEMOTION and not simulate:  # drag to draw (button1 -> ALIVE, else -> DEAD)
-            if drag:
+            cell_grid[x][y] = ALIVE if (cell_grid[x][y] == DEAD) else DEAD
+        elif event.type == pygame.MOUSEMOTION and not simulate:  # drag to draw (LEFTMOUSEBUTTON -> ALIVE, else -> DEAD)
+            if any(event.buttons):
                 x, y = snap_to_grid(event.pos)
-                cell_grid[x][y] = ALIVE if (event.buttons[0] == LEFTMOUSEBUTTON) else DEAD
+                cell_grid[x][y] = ALIVE if event.buttons[LEFTMOUSEBUTTON] else DEAD
 
     # draw background and grid
     screen.fill(bg)
